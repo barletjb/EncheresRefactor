@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<title th:text="${article.nomArticle} ?: 'ENI Détail de la vente'">ENI Détail</title>
+</head>
+<body>
+	<header th:replace="~{fragments/fragment-header :: header}"></header>
+	
+	<main>		
+		<div th:if="${global}" class="alert alert-danger">
+        	<p class="errors" th:each="error : ${global}" th:text="${error}"></p>
+   		</div>
+   		
+		<h3 th:if="${today >= article.dateFinEncheres 
+				  and (etatVente == 'ET' or etatVente == 'RE')}" 
+				  th:text="|'${pseudoAcheteur}' a remporté l'enchère.|">Affichage gagnant</h3>
+		
+		<div class="item-container">
+			<h2 th:text="${article.nomArticle} ?: 'Nom inconnu'"></h2>
+			
+			<div class="image-article">
+				<img th:if="${article.photoArticle} != null" th:src="'/images/' + ${article.photoArticle}" th:alt="${article.nomArticle}">
+			</div>
+			
+			<div th:if="${etatVente == 'CR' or etatVente == 'EC'}">
+				<div>
+					<p th:text="${article.descriptions != null} ? |Description : ${article.descriptions}| : 'Aucune description'">Description</p>
+					<p th:text="${article.categorie.libelle != null} ? 'Catégorie : ' + ${article.categorie.libelle} : 'Categorie non renseignée'">Catégories</p>
+					<p th:text="'Vendeur : ' +${article.utilisateur.pseudo}">Vendeur</p><br>
+				</div>
+			</div>
+			
+			<select 
+					th:if="${utilisateurEnSession != null 
+						  and article.utilisateur.idUtilisateur == utilisateurEnSession.idUtilisateur}"
+					name ="listeEncheres">
+					
+				<option disabled selected> ** Consulter les enchères ** </option>
+				<option 
+						th:each="ench : ${listeEncheres}"
+						th:value="${#temporals.format(ench.dateEnchere, 'yyyyMMddHHmmss')}"
+						th:text="|${ench.utilisateur.pseudo} - ${ench.montantEnchere}(pts) - le :  ${#temporals.format(ench.dateEnchere, 'dd/MM/yyyy HH:mm')}|">
+				</option>				
+			</select>
+			
+			<p th:text="|Mise à prix : ${article.miseAPrix} points|">Mise à prix (points) :</p>
+	
+			<p th:text="${enchere != 0} ? | Meilleure offre : ${enchere} (pts) par ${pseudoAcheteur}| : 'Aucune offre'">Meilleur offre</p>
+			
+			<div th:if="${utilisateurEnSession != null 
+						and utilisateurEnSession.idUtilisateur > 0 
+						and article.utilisateur.idUtilisateur  != utilisateurEnSession.idUtilisateur 
+						and etatVente == 'EC'}">
+				<form th:action="@{/encherir}" method="post">
+					<label for="montant">Ma proposition :</label>
+					<input type="hidden" name="idArticle" th:value="${article.idArticle}">
+					<input type="number" id="montant" name="montant" th:min="${enchere != null and enchere >= article.miseAPrix} ? ${enchere + 1} : ${article.miseAPrix}" th:value="${enchere != null and enchere >= article.miseAPrix} ? ${enchere + 1} : ${article.miseAPrix}" required >
+					<div>
+						<button type="submit">Enchérir</button>
+					</div>
+				</form>
+			</div>
+			
+			<p th:if="${article.dateDebutEncheres >= today}"  
+			   th:text="|Début de l'enchère : ${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}|">Début de l'enchère</p>
+			   
+			<p th:text="|Fin de l'enchère : ${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}|">Fin de l'enchère</p>
+			
+			<fieldset>
+				<legend>Lieu de retrait de l'article :</legend>
+				<p th:text="${article.retrait.rue}">Rue</p>
+				<p th:text="|${article.retrait.codePostal} ${article.retrait.ville}|">Code postal + Ville</p>
+			</fieldset>
+			
+			<div th:if="${utilisateurEnSession != null 
+						and article.utilisateur.idUtilisateur == utilisateurEnSession.idUtilisateur 
+						and article.dateDebutEncheres >= today}">
+						
+				<form th:action="@{/annulerVente}" method="post">
+				<input type="hidden" name ="idArticle" th:value="${article.idArticle}">
+					<button type="submit">Annuler la vente</button>
+				</form>
+			</div>
+			
+			<div th:if="${utilisateurEnSession != null 
+						and article.utilisateur.idUtilisateur == utilisateurEnSession.idUtilisateur 
+						and article.dateFinEncheres < today}">
+						
+				<form th:if ="${etatVente == 'ET'}" th:action="@{/retraitEffectue}" method="post">
+					<input type="hidden" name="idArticle" th:value="${article.idArticle}">
+					<button type="submit">Retrait effectué</button>
+				</form>
+				
+				<form th:action="@{/contacterAcheteur}" method="post">
+					<input type="hidden" th:value="${article.idArticle}">
+					<button type="submit" th:text="'Contacter '" >Contacter acheteur</button>
+				</form>
+			</div>
+		</div>
+		
+		<form th:action="@{/}" method="get">
+			<button type="submit" class="alt-button">Retour</button>
+		</form>
+		
+		<a  th:if="${utilisateurEnSession.getIdUtilisateur()} == ${article.getUtilisateur().getIdUtilisateur()}
+					and ${article.etatVente == 'CR'}" th:href="@{/modifierVente(arti=${article.getIdArticle()})}">Modifier</a>
+	</main>
+</body>
+</html>

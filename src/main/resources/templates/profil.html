@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<title>ENI Enchères</title>
+</head>
+<body>
+	<header th:replace="~{fragments/fragment-header :: header}"></header>
+	<main>
+		<h2 th:text="${utilisateur.getPseudo()}"></h2>
+
+		<h3 th:text="'Solde actuel : ' + ${utilisateur.credit} + ' points'" class="credit-actuel"></h3>
+
+		<form th:if="${utilisateurEnSession.roles} eq 'ROLE_ADMIN' or ${utilisateurEnSession.getIdUtilisateur()} eq ${utilisateur.getIdUtilisateur()}" th:action="@{/achatCredit}" method="get" class="form-profil">
+			<input type="hidden" name="pseudo" th:value="${utilisateur.getPseudo()}" />
+			<button type="submit" class="achat">Achat crédit</button>
+		</form>
+
+		<th:block th:with="readonly=${utilisateurEnSession.getPseudo()} != ${utilisateur.getPseudo()}">
+			<form th:action="@{/profil}" method="post" class="form-profil">
+				<label for="pseudo">Pseudo :</label>
+				<input type="text" name="pseudo" id="pseudo" th:value="${utilisateur.getPseudo()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="nom">Nom :</label>
+				<input type="text" name="nom" id="nom" th:value="${utilisateur.getNom()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="prenom">Prénom :</label>
+				<input type="text" name="prenom" id="prenom" th:value="${utilisateur.getPrenom()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="email">Email :</label>
+				<input type="email" name="email" id="email" th:value="${utilisateur.getEmail()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				<div></div>
+				<label for="telephone">Téléphone :</label>
+				<input type="text" name="telephone" id="telephone" th:value="${utilisateur.getTelephone()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="rue">Rue :</label>
+				<input type="text" name="rue" id="rue" th:value="${utilisateur.getRue()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="codePostal">Code postal :</label>
+				<input type="text" name="codePostal" id="codePostal" th:value="${utilisateur.getCodePostal()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+				
+				<label for="ville">Ville :</label>
+				<input type="text" name="ville" id="ville" th:value="${utilisateur.getVille()}" th:attr="readonly=${readonly} ? 'readonly' : null" />
+
+				<button th:if="${!readonly}" type="submit">Modifier</button>
+			</form>
+		</th:block>
+		<br>
+		<br>
+		<br>
+		<br>
+		<form th:if="${utilisateurEnSession.roles} eq 'ROLE_ADMIN' or ${utilisateurEnSession.getIdUtilisateur()} eq ${utilisateur.getIdUtilisateur()}" th:action="@{/supprimerProfil}" method="get" class="form-profil">
+			<input type="hidden" name="pseudoSup" th:value="${utilisateur.getPseudo()}" />
+			<button type="submit" class="alert-button">Supprimer le compte</button>
+		</form>
+
+		<form th:if="${utilisateurEnSession.roles} eq 'ROLE_ADMIN'" th:action="@{desactiverProfil}" method="get">
+			<input type="hidden" name="pseudo" th:value="${utilisateur.getPseudo()}" />
+			<button type="submit" class="alert-button">Desactiver</button>
+		</form>
+	</main>
+</body>
+
+
+</html>

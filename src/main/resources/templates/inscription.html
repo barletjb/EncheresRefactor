@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<title>Inscription</title>
+	<link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+	<header>
+		<h1 id="nav-title">
+			<a th:href="@{/}" id="return-index"><img src="/images/logo-encheres.png" alt="logo eni enchères" id="logo-eni-encheres">- Enchères</a>
+		</h1>
+		<button id="darkmode">Dark</button>
+	</header>
+	<main>
+		<h2>Créer un compte</h2>
+
+		<form th:action="@{/inscription}" method="post"
+			th:object="${utilisateur}">
+
+			<label for="pseudo">Pseudo :</label> 
+			<input type="text" id="pseudo" th:field="*{pseudo}">
+			<p th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}" class="error"></p>
+
+			<label for="nom">Nom :</label> 
+			<input type="text" id="nom" th:field="*{nom}">
+			<p th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error"></p>
+
+			<label for="prenom">Prénom :</label> 
+			<input type="text" id="prenom" th:field="*{prenom}">
+			<p th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}" class="error"></p>
+
+			<label for="email">Email :</label> 
+			<input type="email" id="email" th:field="*{email}">
+			<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></p>
+
+			<label for="telephone">Téléphone :</label> 
+			<input type="text" id="telephone" th:field="*{telephone}">
+			<p th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" class="error"></p>
+
+			<label for="rue">Rue :</label> 
+			<input type="text" id="rue" th:field="*{rue}">
+			<p th:if="${#fields.hasErrors('rue')}" th:errors="*{rue}" class="error"></p>
+
+			<label for="codePostal">Code postal :</label> 
+			<input type="text" id="codePostal" th:field="*{codePostal}">
+			<p th:if="${#fields.hasErrors('codePostal')}" th:errors="*{codePostal}" class="error"></p>
+
+			<label for="ville">Ville :</label> 
+			<input type="text" id="ville" th:field="*{ville}">
+			<p th:if="${#fields.hasErrors('ville')}" th:errors="*{ville}" class="error"></p>
+
+			<label for="password1">Mot de passe :</label> 
+			<input type="password" id="password1" th:field="*{motDePasse}">
+			<p th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}" class="error"></p>
+
+			<label for="password2">Confirmation :</label> 
+			<input type="password" id="password2" name="confirmationMotDePasse">
+			
+			<button type="submit">Créer</button>
+		</form>							
+		
+		<form th:action="@{/connexion}" method="get">
+			<button type="submit">Annuler</button>
+		</form>
+	</main>
+</body>
+</html>

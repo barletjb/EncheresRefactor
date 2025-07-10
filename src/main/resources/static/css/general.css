@@ -1,0 +1,133 @@
+@charset "UTF-8";
+
+:root {
+	--banniere: rgb(70, 180, 230);
+	--fond: #f8f9fa;
+	--text: black;
+	--links: goldenrod;
+	--links-hover: darkgoldenrod;
+	--items-background: white;
+	--items-border: black;
+	--items-shadow: rgba(0, 0, 0, 0.4);
+	--button: lightskyblue;
+	--button-hover: orange;
+	--darkmode-button: black;
+	--darkmode-button-text: white;
+	--search-button: rgb(70, 180, 230);
+	--alt-buttons: orange;
+	--alt-buttons-hover: black;
+}
+
+.darkmode {
+	--banniere: rgb(30,30,30);
+	--fond: rgb(70,70,70);
+	--text: white;
+	--links-hover: gold;
+	--items-background: rgb(30, 30, 30);
+	--items-border: darkgoldenrod;
+	--darkmode-button: rgb(170, 170, 170);
+	--darkmode-button-text: black;
+	--search-button: white;
+	--alt-buttons: white;
+	--alt-buttons-hover: orange;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background-color: var(--fond);
+  color: var(--text);
+  text-align: center;
+  transition: background-color 0.5s ease-out, color 0.5s ease-out;
+}
+
+.no-transition {
+  transition: none !important;
+}
+
+a {
+	color: var(--links);
+	
+	&:hover{
+		color: var(--links-hover);
+	}
+}
+
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--banniere);
+	background-image: url("/images/banniere.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	padding: 150px 50px;
+	mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+	
+	a {
+		color: white;
+		text-decoration: none;
+		margin: 10px;
+	}	
+}
+
+#nav-title {
+	margin-right: auto;
+	font-size: 1.1em;
+	
+	img {
+		width: 100px;
+	}	
+}
+
+h2 {	
+	text-align: center;
+}
+
+button{
+	padding: 5px 10px;
+	background-color: var(--button);
+	border: none;
+	border-radius: 10px;
+	
+	&:hover {
+		background-color: var(--button-hover);
+	}
+}
+
+#darkmode {
+	background-color: var(--darkmode-button);
+	color: var(--darkmode-button-text);
+	
+	&:hover {
+		background-color: var(--button-hover);
+	}
+}
+
+#img-preview {
+	display: none;
+	max-width: 40%;
+	
+	img {
+		width: 100%;
+	}
+}
+
+.image-article {
+	max-width: 40%;
+	display: block;
+	margin: auto;
+	
+	img {
+		max-width: 100%;
+		max-height: 400px;
+	}
+}
+
+.errors {
+	color: red;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+	

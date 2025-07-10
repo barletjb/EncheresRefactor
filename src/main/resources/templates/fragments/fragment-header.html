@@ -1,0 +1,21 @@
+<!-- Navbar -->
+<header th:fragment="header">
+	<h1 id="nav-title">
+		<a th:href="@{/}" id="return-index"><img src="/images/logo-encheres.png" alt="logo eni enchères" id="logo-eni-encheres">- Enchères</a>
+	</h1>
+	<nav>
+		<a th:if="${utilisateurEnSession != null && utilisateurEnSession.idUtilisateur > 0}" th:href="@{/encheres}">Enchères</a>
+
+		<a th:if="${utilisateurEnSession != null && utilisateurEnSession.idUtilisateur > 0}" th:href="@{/vendre-article}">Vendre un objet</a>
+
+		<a th:if="${utilisateurEnSession != null && utilisateurEnSession.idUtilisateur > 0}" th:href="@{/profil(pseudo=${utilisateurEnSession.pseudo})}">Mon profil</a>
+
+		<a th:if="${utilisateurEnSession eq null || utilisateurEnSession.getIdUtilisateur() == 0}"  th:href="@{/inscription}">S'inscrire</a>
+
+		<a th:if="${utilisateurEnSession eq null ||utilisateurEnSession.getIdUtilisateur() == 0}" th:href="@{/connexion}">Se connecter</a>
+
+		<a  th:if="${utilisateurEnSession != null && utilisateurEnSession.getIdUtilisateur() > 0}" th:href="@{/deconnexion}">Déconnexion</a>
+		
+		<button id="darkmode">Dark</button>
+	</nav>
+</header>

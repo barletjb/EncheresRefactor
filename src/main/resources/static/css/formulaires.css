@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+form, fieldset {
+	display: flex ;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	padding: 30px;
+	width: 60%;
+	margin: auto;
+	gap: 10px;
+	
+	label {
+		text-align: left;
+	}
+	
+	legend {
+		padding: 0 20px;
+		text-decoration: underline;
+		font-weight: bold;
+	}
+	
+	button {
+		width: 150px;
+		padding: 10px;
+		
+		&.achat {
+			background-color: orange;
+			
+			&:hover {
+				background-color: white;
+			}
+		}
+
+		&.alert-button {
+			background-color: red;
+			
+			&:hover {
+				background-color: orange;
+			}
+		}
+		
+		&.alt-button {
+			background-color: var(--alt-buttons);
+			
+			&:hover {
+				background-color: var(--alt-buttons-hover);
+				color: var(--alt-buttons); 
+			}
+		}
+	}
+}
+
+input, select, textarea {
+	padding: 5px 10px;
+	border-radius: 10px;
+	min-width: 200px;
+	max-width: 400px;
+	
+	&[type=radio], &[type=checkbox] {
+		min-width: 0;
+	}
+}
+
+select {
+	padding: 5px 10px;
+	border-radius: 10px;
+	
+	&:focus {
+		border-radius: 10px 10px 0 0;
+	}
+}
+	
+.souvenir{
+	display: flex;
+	justify-content: center;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<title>ENI Achat de crédits</title>
+</head>
+<body>
+	<header th:replace="~{fragments/fragment-header :: header}"></header>
+	
+	<h2>Achat crédit</h2>
+
+	<div class="list-buttons">
+		<form th:action="@{/crediter}" method="post">
+			<button type="submit" name="montant" value="100">100 points</button>
+		
+			<button type="submit" name="montant" value="150">150 points</button>
+		
+			<button type="submit" name="montant" value="200">200 points</button>
+	
+			<button type="submit" name="montant" value="250">250 points</button>
+		</form>
+	</div>
+	
+	
+	<form th:action="@{/crediter}" method="post">
+    	<label for="montant">Autre montant :</label>
+    	<input type="number" id="montant" name="montant" min="1" required />
+    	<div>
+        	<button type="submit">Créditer</button>
+    	</div>
+	</form>
+
+</body>
+</html>

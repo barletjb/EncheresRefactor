@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<link rel="stylesheet" th:href="@{/css/index.css}" />
+	<title>ENI Enchères</title>
+</head>
+<body>
+	<header th:replace="~{fragments/fragment-header :: header}"></header>
+	<main>
+		<h2>Les enchères vedettes</h2>
+		
+		<div class="carousel">
+			<div class="carousel-track" id="carouselTrack">
+				<div class="carousel-item" th:each="a : ${trendingArticles}">
+					<a th:href="@{/detail-vente(idArticle=${a.idArticle})}">
+						<img th:src="@{'/images/' + ${a.photoArticle}}" th:alt="${a.nomArticle}">
+						<span th:text="${a.nomArticle}"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<h2>Liste des enchères</h2>
+		
+		<form th:action="@{/encheres/rechercher}" method="post" class="barre-filtre-f">
+			<div>
+				<label for="filtres">Filtres :</label>
+				<input type="text" name="filtreNom" id="filtres" placeholder="Le nom de l'article contient">
+			</div>
+			
+			<div>
+				<label for="categories">Catégorie :</label>
+				<select name="categories" id="categories">
+					<option value="0">Toutes</option>
+					<option th:each="c : ${categoriesEnSession}" th:text="${c.libelle}" th:value="${c.idCategorie}"></option>
+				</select>
+			</div>
+			
+			<div th:if="${utilisateurEnSession != null && utilisateurEnSession.getIdUtilisateur() > 0}" class="dropdown-container" id="achats-dropdown">
+				<input type="radio" id="achats" name="achatsVentes" value="achats">
+				<label for="achats">Achats <span class="dropdown-arrow">↓</span></label>
+				
+				<ul id="achats-liste" class="dropdown hidden">
+					<li>
+						<input type="checkbox" name="encheresEnCours" id="encheres-en-cours" value="EC" class="achats">
+						<label for="encheres-en-cours">enchères ouvertes</label>
+					</li>
+					<li>
+						<input type="checkbox" name="mesEncheres" id="mes-encheres" th:value="${utilisateurEnSession.idUtilisateur}" class="achats">
+						<label for="mes-encheres">mes enchères</label>
+					</li>
+					<li>
+						<input type="checkbox" name="encheresRemportees" id="encheres-remportees" th:value="${utilisateurEnSession.idUtilisateur}" class="achats">
+						<label for="encheres-remportees">mes enchères remportées</label>
+					</li>
+				</ul>
+			</div>
+			
+			<div th:if="${utilisateurEnSession != null && utilisateurEnSession.getIdUtilisateur() > 0}" class="dropdown-container" id="ventes-dropdown">
+				<input type="radio" id="ventes" name="achatsVentes" value="ventes">
+				<label for="ventes">Mes ventes <span class="dropdown-arrow">↓</span></label>
+				
+				<ul id="ventes-liste" class="dropdown hidden">
+					<li>
+						<input type="checkbox" name="ventesEnCours" id="ventes-en-cours" th:value="${utilisateurEnSession.idUtilisateur}" class="ventes">
+						<label for="ventes-en-cours">ventes en cours</label>
+					</li>
+					<li>
+						<input type="checkbox" name="ventesEnAttente" id="ventes-en-attente" th:value="${utilisateurEnSession.idUtilisateur}" class="ventes">
+						<label for="ventes-en-attente">ventes non débutées</label>
+					</li>
+					<li>
+						<input type="checkbox" name="ventesTerminees" id="ventes-terminees" th:value="${utilisateurEnSession.idUtilisateur}" class="ventes">
+						<label for="ventes-terminees">ventes terminées</label>
+					</li>
+				</ul>
+			</div>
+			
+			<button type="submit" class="alt-button">Rechercher</button>
+		</form>
+		
+		<div class="articles">
+			<div class="item-container" th:each="a : ${articles}" >
+				<div class="photo-article">
+					<a th:href="@{/detail-vente(idArticle=${a.idArticle})}">
+						<img th:src="'/images/' + ${a.photoArticle}" th:alt="${a.nomArticle}">
+					</a>
+				</div>
+				<div class="description-article">
+					<a th:href="@{/detail-vente(idArticle=${a.idArticle})}" th:text="${a.nomArticle}"></a>
+					<p th:text="'Prix : ' + ${a.miseAPrix} + ' points'"></p>
+					<p th:class="${couleurs[a.idArticle]}"
+					   th:text="'Fin de l\'enchère : ' + ${#temporals.format(a.dateFinEncheres, 'dd/MM/yyyy')}">
+					</p>
+					<p>Vendeur : <a th:href="@{/profil(pseudo=${a.utilisateur.pseudo})}" th:text="${a.utilisateur.pseudo}"></a></p>
+				</div>
+			</div>
+		</div>
+		
+		<div th:if="${pagination} eq 'on'" class="pagination">
+			<a th:if="${currentPage > 1}" th:href="@{/index(page=${currentPage - 1})}">« Précédent</a>
+			<span th:each="i : ${#numbers.sequence(1, totalPages)}">
+				<a th:href="@{/index(page=${i})}"
+				       th:text="${i}"
+				       th:classappend="${i == currentPage} ? 'active'">
+				</a>
+			</span>
+			<a th:if="${currentPage < totalPages}" th:href="@{/index(page=${currentPage + 1})}">Suivant »</a>
+		</div>
+	</main>
+	<script th:if="${utilisateurEnSession != null && utilisateurEnSession.idUtilisateur > 0}" src="/scripts/filtres-connecte.js"></script>
+	<script src="/scripts/carrousel.js"></script>
+</body>
+</html>

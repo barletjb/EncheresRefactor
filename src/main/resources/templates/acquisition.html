@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/fragment-head :: head}"></th:block>
+	<title>Acquisition</title>
+</head>
+<body>
+	<header>
+		<h1 id="nav-title">
+			<a th:href="@{/}" id="return-index"><img src="/images/logo-encheres.png" alt="logo eni enchères" id="logo-eni-encheres">- Enchères</a>
+		</h1>
+		<button id="darkmode">Dark</button>
+	</header>
+	<main>
+		
+		<h2>Vous avez remporté l'enchère</h2>
+
+		<div class=>
+			<!-- <img th:src="${article.src}" alt="${article.nomArticle}"> -->
+			<p th:text="${article.nomArticle}">Nom article</p>
+			<p th:text="${article.descriptions}">Descriptions :</p>
+		</div>
+		<p>Meilleure offre :</p>
+		<p th:text="'Mise à prix : ' + ${article.miseAPrix}">Mise à prix :</p>
+		<br>
+
+
+		<div class="item-container">
+			<p>Retrait</p>
+			<p th:text="${article.retrait.rue}">Rue</p>
+			<p th:text="${article.retrait.codePostal}">Code postal</p>
+			<p th:text="${article.retrait.ville}">Ville</p>
+			<br>
+			<p th:text="'Vendeur : ' +${article.utilisateur.pseudo}">Pseudo</p>
+			<p th:text="'Téléphone : ' +${article.utilisateur.telephone}">Téléphone</p>
+		</div>
+		<br>
+
+		<form th:action="@{/retraitEffectue}" method="post">
+			<input type="hidden" name="idArticle" th:value="${article.idArticle}">
+			<button type="submit">Retrait effectué</button>
+		</form>
+
+	</main>
+
+
+</body>
+</html>

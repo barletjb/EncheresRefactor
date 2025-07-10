@@ -1,0 +1,9 @@
+@charset "UTF-8";
+.error {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+   color: red;
+   size: 1px;
+	margin: 5px;
+}
