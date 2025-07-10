@@ -128,20 +128,29 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	public List<Article> getTopTrendingArticles() {
 
-		String sql = "SELECT TOP 5 a.*, r.rue, r.codePostal, r.ville FROM article a "
-				+ "LEFT JOIN retrait r ON a.idArticle = r.idArticle JOIN (SELECT idArticle, COUNT(*) AS nbEncheres FROM enchere "
-				+ "GROUP BY idArticle) e ON a.idArticle = e.idArticle ORDER BY e.nbEncheres DESC";
+		String sql = "SELECT a.*, r.rue, r.codePostal, r.ville FROM article a "
+				+ "LEFT JOIN retrait r ON a.idArticle = r.idArticle "
+				+ "JOIN (SELECT idArticle, COUNT(*) AS nbEncheres FROM enchere "
+				+ "GROUP BY idArticle) e ON a.idArticle = e.idArticle "
+				+ "ORDER BY e.nbEncheres DESC "
+				+ "LIMIT 5";
 
 		return jdb.query(sql, new ArticleMapper());
 	}
 
 	public List<Article> getArticlesByPage(int page, int pageSize) {
-		
-		String sql = "select * from article inner join retrait on article.idArticle = retrait.idArticle ORDER BY article.dateFinEncheres DESC OFFSET :offset ROWS FETCH NEXT 6 ROWS ONLY";
+
+		String sql = """
+        SELECT * FROM article
+        INNER JOIN retrait ON article.idArticle = retrait.idArticle
+        ORDER BY article.dateFinEncheres DESC
+        LIMIT :limit OFFSET :offset
+    """;
 
 		int offset = (page - 1) * pageSize;
-		
+
 		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("limit", pageSize);
 		map.addValue("offset", offset);
 
 		return jdb.query(sql, map, new ArticleMapper());
