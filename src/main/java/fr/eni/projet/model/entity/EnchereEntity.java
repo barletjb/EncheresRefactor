@@ -27,10 +27,12 @@ public class EnchereEntity {
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id_utilisateur")
+    @ToString.Exclude
     private Utilisateur utilisateur;
 
     @ManyToOne
     @JoinColumn(name = "enchere_article_id_article")
+    @ToString.Exclude
     private Article enchereArticle;
 
 }
